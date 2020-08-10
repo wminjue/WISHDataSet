@@ -1,0 +1,149 @@
+---
+title: "Social_Desire_Score"
+author: "Minjue Wu"
+date: "8/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(gganimate)
+library(janitor)
+library(animation)
+library(magick)
+library(readxl)
+library(knitr)
+library(tidyverse)
+library(dplyr)
+library(gt)
+library(tidyr)
+library(mapdata)
+library(rstanarm)
+library(lubridate)
+
+wish <- read_excel("SDI.xlsx") %>%
+  glimpse()
+
+# 1
+wish$`Hard to go on with work if not encouraged (SCORE)`[wish$`Hard to go on with work if not encouraged (SCORE)` == 1] <- 3
+wish$`Hard to go on with work if not encouraged (SCORE)`[wish$`Hard to go on with work if not encouraged (SCORE)` != 3] <- 0
+wish$`Hard to go on with work if not encouraged (SCORE)`[wish$`Hard to go on with work if not encouraged (SCORE)` == 3] <- 1
+
+# 2
+wish$`Feel resentful when I don’t get my way (SCORE)`[wish$`Feel resentful when I don’t get my way (SCORE)`== 1] <- 3
+wish$`Feel resentful when I don’t get my way (SCORE)`[wish$`Feel resentful when I don’t get my way (SCORE)`!= 3] <- 0
+wish$`Feel resentful when I don’t get my way (SCORE)`[wish$`Feel resentful when I don’t get my way (SCORE)`== 3] <- 1
+
+
+# 3
+wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`[wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`== 1] <- 3
+
+wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`[wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`!= 3] <- 0
+
+wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`[wish$`On occasion, given up doing something because thought too little of my ability (SCORE)`== 3] <- 1
+
+
+# 4
+wish$`Rebelling against people in authority even though they were right (SCORE)`[wish$`Rebelling against people in authority even though they were right (SCORE)`==1] <- 3
+
+wish$`Rebelling against people in authority even though they were right (SCORE)`[wish$`Rebelling against people in authority even though they were right (SCORE)`!=3] <- 0
+
+wish$`Rebelling against people in authority even though they were right (SCORE)`[wish$`Rebelling against people in authority even though they were right (SCORE)`==3] <- 1
+
+
+#5
+wish$`Been occasions when I took advantage of someone (SCORE)`[wish$`Been occasions when I took advantage of someone (SCORE)`==1] <-3
+
+wish$`Been occasions when I took advantage of someone (SCORE)`[wish$`Been occasions when I took advantage of someone (SCORE)`!=3] <-0
+
+wish$`Been occasions when I took advantage of someone (SCORE)`[wish$`Been occasions when I took advantage of someone (SCORE)`==3] <-1
+
+
+#6
+wish$`I sometimes try to get even rather than forgive and forget (SCORE)`[wish$`I sometimes try to get even rather than forgive and forget (SCORE)`==1] <-3
+wish$`I sometimes try to get even rather than forgive and forget (SCORE)`[wish$`I sometimes try to get even rather than forgive and forget (SCORE)`!=3] <-0
+wish$`I sometimes try to get even rather than forgive and forget (SCORE)`[wish$`I sometimes try to get even rather than forgive and forget (SCORE)`==3] <-1
+
+
+#7
+wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`[wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`==1] <-3
+wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`[wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`!=3] <-0
+wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`[wish$`There have times when I was quite jealous of the good fortune of others (SCORE)`==3] <-1
+
+
+
+#8
+wish$`I am sometimes irritated by people who ask favors of me (SCORE)`[wish$`I am sometimes irritated by people who ask favors of me (SCORE)`==1] <-3
+wish$`I am sometimes irritated by people who ask favors of me (SCORE)`[wish$`I am sometimes irritated by people who ask favors of me (SCORE)`!=3] <-0
+wish$`I am sometimes irritated by people who ask favors of me (SCORE)`[wish$`I am sometimes irritated by people who ask favors of me (SCORE)`==3] <-1
+
+
+#9
+wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`[wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`==0] <-3
+wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`[wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`!=3] <-0
+wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`[wish$`No matter who I’m talking to, I’m always a good listener (SCORE)`==3] <-1
+
+
+#10
+wish$`Always willing to admit it when I make a mistake (SCORE)`[wish$`Always willing to admit it when I make a mistake (SCORE)`==0] <-3
+wish$`Always willing to admit it when I make a mistake (SCORE)`[wish$`Always willing to admit it when I make a mistake (SCORE)`!=3] <-0
+wish$`Always willing to admit it when I make a mistake (SCORE)`[wish$`Always willing to admit it when I make a mistake (SCORE)`==3] <-1
+
+#11
+wish$`I am always courteous, even to people who are disagreeable (SCORE)`[wish$`I am always courteous, even to people who are disagreeable (SCORE)`==0] <-3
+wish$`I am always courteous, even to people who are disagreeable (SCORE)`[wish$`I am always courteous, even to people who are disagreeable (SCORE)`!=3] <-0
+wish$`I am always courteous, even to people who are disagreeable (SCORE)`[wish$`I am always courteous, even to people who are disagreeable (SCORE)`==3] <-1
+
+
+#12
+wish$`Never been irked when people expressed ideas very different (SCORE)`[wish$`Never been irked when people expressed ideas very different (SCORE)`==0] <-3
+wish$`Never been irked when people expressed ideas very different (SCORE)`[wish$`Never been irked when people expressed ideas very different (SCORE)`!=3] <-0
+wish$`Never been irked when people expressed ideas very different (SCORE)`[wish$`Never been irked when people expressed ideas very different (SCORE)`==3] <-1
+
+
+#13
+wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`[wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`==0] <-3
+wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`[wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`!=3] <-0
+wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`[wish$`I have never deliberately said something that hurt someone’s feelings (SCORE)`==3] <-1
+
+
+wish <- transform(wish, `Hard to go on with work if not encouraged (SCORE)` = as.numeric(`Hard to go on with work if not encouraged (SCORE)`),
+                  `Feel resentful when I don’t get my way (SCORE)` = as.numeric(`Feel resentful when I don’t get my way (SCORE)`),
+                  `On occasion, given up doing something because thought too little of my ability (SCORE)` = as.numeric(`On occasion, given up doing something because thought too little of my ability (SCORE)`),
+                  `Rebelling against people in authority even though they were right (SCORE)` = as.numeric(`Rebelling against people in authority even though they were right (SCORE)`),
+                  `Been occasions when I took advantage of someone (SCORE)` = as.numeric(`Been occasions when I took advantage of someone (SCORE)`),
+                  `I sometimes try to get even rather than forgive and forget (SCORE)` = as.numeric(`I sometimes try to get even rather than forgive and forget (SCORE)`),
+                  `There have times when I was quite jealous of the good fortune of others (SCORE)` = as.numeric(`There have times when I was quite jealous of the good fortune of others (SCORE)`),
+                  `I am sometimes irritated by people who ask favors of me (SCORE)` = as.numeric(`I am sometimes irritated by people who ask favors of me (SCORE)`),
+                  `No matter who I’m talking to, I’m always a good listener (SCORE)` = as.numeric(`No matter who I’m talking to, I’m always a good listener (SCORE)`),
+                  `Always willing to admit it when I make a mistake (SCORE)` = as.numeric(`Always willing to admit it when I make a mistake (SCORE)`),
+                  `I am always courteous, even to people who are disagreeable (SCORE)` = as.numeric(`I am always courteous, even to people who are disagreeable (SCORE)`),
+                  `Never been irked when people expressed ideas very different (SCORE)` = as.numeric(`Never been irked when people expressed ideas very different (SCORE)`),
+                  `I have never deliberately said something that hurt someone’s feelings (SCORE)` = as.numeric(`I have never deliberately said something that hurt someone’s feelings (SCORE)`))
+
+wish$`social desirability score` <- rowSums(wish[, 2:14])
+
+view(wish)
+
+sums <- subset(wish, select = -c(`...1`, `social desirability score`))
+
+sums <- sums %>% replace(is.na(.),0) %>% summarise_all(funs(sum))
+
+view(sums)
+
+write.csv(sums, file = "sums.csv")
+
+write.csv(wish, file = "wish.csv")
+
+sdiscore <- subset(wish, select = `social desirability score`) %>% na.omit()
+summary(sdiscore)
+sd(sdiscore$`social desirability score`)
+sdiscore <- as.data.frame(table(sdiscore))
+sdiplot <- ggplot(data=sdiscore, aes(x = sdiscore, y = `Freq`)) + geom_bar(stat = "identity", width = .7) +labs(title = "Social Desirability Score Distribution", y= "Frequency", x = "Social Desirability Score")
+sdiplot
+view(sdiscore)
+
+write.csv(sdiscore, file = "sdiscore.csv")
+
+
+```
