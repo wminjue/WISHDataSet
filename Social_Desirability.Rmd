@@ -147,3 +147,13 @@ write.csv(sdiscore, file = "sdiscore.csv")
 
 
 ```
+
+```{r cronbach, include=FALSE}
+library(psy)
+cwish <- wish %>%
+  subset(select = -c(`...1`, `social desirability score`)) %>%
+  na.omit() %>%
+  as.data.frame.matrix() 
+
+cronbach(cwish)
+```
